@@ -1,0 +1,60 @@
+root@ip-172-31-24-53:/opt/ansible# cat usermanagement.yml
+---
+
+##User to automate user management
+##Create user, delete user, create Group, delete group
+
+- hosts: all
+  become: root
+  tasks:
+
+   #To create the users
+   - name: Create the group
+     group:
+      name={{ item }}
+      state=present
+     with_items:
+      - demogrp
+      - demogrp2
+     tags: add_new_group
+
+   #Add users
+   - name: Create and add users
+     user:
+      name={{ item }}
+      state=present
+      groups=demogrp
+     with_items:
+      - demouser
+      - demouser2
+      - demouser3
+     tags: add_new_users
+
+   #Delete users
+   - name: Delete users
+     user:
+      name={{ item }}
+      state=absent
+     with_items:
+      - demouser2
+      - demouser3
+     tags: remove-user
+   #Generate SSH key
+   - name: Generate ssh keys
+     user:
+      name={{ item }}
+      generate_ssh_key=yes
+      ssh_key_bits=4096
+      ssh_key_file=.ssh/id_rsa
+     with_items:
+      - demouser
+      - demouser2
+     tags: generate_ssh_keys
+
+   #Copy the Pub key
+   - name: Copykey
+     authorized_key:
+      user: demouser
+      state: present
+      key: "{{ lookup{'file','/home/demouser/.ssh/id_rsa.pub'} }}"
+     tags: copy_pub_key
