@@ -1,3 +1,8 @@
+#Take a backup of sudoers file (/etc/sudoers).
+#Adding Multiple Users and Appending in Sudoers file with NOPASSWORD.
+#Users are allowed to log in with private keys only.
+#Finally, verify the Sudoers file if any syntax error.
+
 ---
 - hosts: all
   become: yes
