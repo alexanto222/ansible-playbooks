@@ -1,3 +1,4 @@
+#https://gurjap.org/user-ansible-create-multiple-users-authorize-ssh-keys/
 ---
 - hosts: webservers #modify your server list
   remote_user: root
